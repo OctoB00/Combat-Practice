@@ -3,15 +3,41 @@
         private string name;
         private int damage;
         private int armor;
+
+        public Item(string Name, int Damage, int Armor)
+        {
+            name = Name;
+            damage = Damage;
+            armor = Armor;
+        }
+        public string ItemName()
+        {
+            return name;
+        }
+        public int ItemDamage()
+        {
+            return damage;
+        }
+        public int ItemArmor()
+        {
+            return armor;
+        }
     }
     class Combatant
     {
         private int health;
         private List<Item> items;
 
+
+        public Combatant(int Health)
+        {
+            health = Health;
+        }
+
         public void Additem(string Name, int Damage, int Armor)
         {
-            items.Add(Item(Name, Damage, Armor));
+            Item item = new Item(Name, Damage, Armor);
+            items.Add(item);
         }
         public bool IsAlive()
         {
@@ -28,6 +54,10 @@
         {
             if (Damage > 0)
             {
+                for (int i = 0; i < items.Count; i++)
+                {
+                    health -= Damage + items[i].ItemDamage() - items[i].ItemArmor();
+                }
                 return true;
             }
             else
@@ -39,12 +69,55 @@
         {
             Random ran = new Random();
             int damagemodifier = ran.Next(1, 6);
+            int damage = 0;
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i].ItemName() == "Axe")
+                {
+                    switch(damagemodifier)
+                    {
+                        case 1: damage = 0; break;
+                        case 2: damage = 0; break;
+                        case 3: damage = 3; break;
+                        case 4: damage = 3; break;
+                    }
+                }
+            }
+        }
+    }
+    class Battle
+    {
+        Combatant hero = new Combatant(75);
+        Combatant monster = new Combatant(50);
+        public void Update()
+        {
+            while (hero.IsAlive() == true && monster.IsAlive() == true)
+            {
+                hero.TakeDamage(monster.RollDamage());
+                Console.WriteLine($"The hero took {monster.RollDamage()} damage!");
+                monster.TakeDamage(hero.RollDamage());
+                Console.WriteLine($"The monster took {hero.RollDamage()} damage!");
+            }
+            if (hero.IsAlive() == true && monster.IsAlive() == false)
+            {
+                Console.WriteLine("The hero wins!");
+            }
+            else if (hero.IsAlive() == false && monster.IsAlive() == true)
+            {
+                Console.WriteLine("The monster wins!");
+            }
+            else
+            {
+                Console.WriteLine("I dunno what just happened...");
+            }
         }
     }
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Battle battle = new Battle();
+            battle.Update();
         }
     }
