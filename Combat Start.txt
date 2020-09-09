@@ -1,0 +1,50 @@
+    class Item
+    {
+        private string name;
+        private int damage;
+        private int armor;
+    }
+    class Combatant
+    {
+        private int health;
+        private List<Item> items;
+
+        public void Additem(string Name, int Damage, int Armor)
+        {
+            items.Add(Item(Name, Damage, Armor));
+        }
+        public bool IsAlive()
+        {
+            if (health > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool TakeDamage(int Damage)
+        {
+            if (Damage > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public int RollDamage()
+        {
+            Random ran = new Random();
+            int damagemodifier = ran.Next(1, 6);
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+        }
+    }
